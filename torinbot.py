@@ -172,7 +172,7 @@ async def view_tasks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(response)
 
 
-application = ApplicationBuilder().token('7384703197:AAHmbSd9O8hAdqhhpisZlWbc4YdSL5rqLHo').build()
+application = ApplicationBuilder().token('Your token').build()
 application.add_handler(CommandHandler("start", start))
 application.add_handler(CommandHandler("add", add_task))
 application.add_handler(CommandHandler("change", change_task))
