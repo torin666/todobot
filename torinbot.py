@@ -42,7 +42,7 @@ class TodoListBot:
                 cursor.execute('INSERT INTO todos (user_id, task, added_time) VALUES (?, ?, ?)',
                                (user_id, task, added_time))
                 conn.commit()
-                return f"Task added: {task}"
+                return f"Задача добавлена: {task}"
             except sqlite3.IntegrintyError:
                 return "Задача уже существует."
 
@@ -61,8 +61,8 @@ class TodoListBot:
                 task_id_to_delete = tasks[index][0]
                 cursor.execute('DELETE FROM todos WHERE task_id = ?', (task_id_to_delete,))
                 conn.commit()
-                return f"Task deleted: {tasks[index][1]}"
-            return "Task not found."
+                return f"Задача удалена: {tasks[index][1]}"
+            return "Задача не найдена."
 
     def change_task_by_index(self, user_id, index, new_task):
         """
@@ -80,8 +80,8 @@ class TodoListBot:
                 task_id_to_change = tasks[index][0]
                 cursor.execute('UPDATE todos SET task = ? WHERE task_id = ?', (new_task, task_id_to_change))
                 conn.commit()
-                return f"Task changed: {tasks[index][1]} to {new_task}"
-            return "Task not found."
+                return f"Задача изменена: {tasks[index][1]} to {new_task}"
+            return "Задача не найдена."
 
     def view_tasks(self, user_id):
         """
@@ -95,8 +95,8 @@ class TodoListBot:
             tasks = cursor.fetchall()
             if tasks:
                 #
-                return "Your tasks:\n" + "\n".join(f"{i + 1}. {task[0]}" for i, task in enumerate(tasks))
-            return "No tasks found."
+                return "Ваши задачи:\n" + "\n".join(f"{i + 1}. {task[0]}" for i, task in enumerate(tasks))
+            return "Задачи не найдены."
 
 
 todo_bot = TodoListBot()
