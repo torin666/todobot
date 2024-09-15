@@ -45,6 +45,7 @@ class TodoListBot:
                 return f"Task added: {task}"
             except sqlite3.IntegrintyError:
                 return "Задача уже существует."
+
     def delete_task_by_index(self, user_id, index):
         """
 
