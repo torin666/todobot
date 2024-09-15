@@ -30,7 +30,7 @@ class TodoListBot:
 
     def add_task(self, user_id, task):
         """
-
+        Функция добавляет задачу в список
         :param user_id:Определяет пользователя, для дальнейшего взаимодействия с ним
         :param task:Добавляет задачу в базу данных
         :return:отправляет пользователю результат добавления задачи в список
@@ -48,7 +48,7 @@ class TodoListBot:
 
     def delete_task_by_index(self, user_id, index):
         """
-
+        Функция удаляет задачу из списка
         :param user_id:Определяет пользователя, для дальнейшего взаимодействия с ним
         :param index:Номер задачи в базе данных
         :return:отправляет пользователю результат об удалении задачи из списка, либо об ее отсутствии
@@ -66,11 +66,11 @@ class TodoListBot:
 
     def change_task_by_index(self, user_id, index, new_task):
         """
-
+        Функция для изменения задачи в списке
         :param user_id:Определяет пользователя, для дальнейшего взаимодействия с ним
         :param index:Номер задачи в базе данных
-        :param new_task:принимает новую задачу и производит замену старой
-        :return:отправляет пользователю результат об изменении в списке, либо об отсутствии заменяемой задачи, при ошибке пользователя
+        :param new_task:принимает новую задачу
+        :return:отправляет пользователю результат об изменении в списке, либо об отсутствии заменяемой задачи
         """
         with sqlite3.connect(self.db_name) as conn:
             cursor = conn.cursor()
@@ -85,7 +85,7 @@ class TodoListBot:
 
     def view_tasks(self, user_id):
         """
-
+        Функция показывает пользователю список задач.
         :param user_id:Определяет пользователя, для дальнейшего взаимодействия с ним
         :return:отправляет пользователю список его задач
         """
@@ -103,9 +103,8 @@ todo_bot = TodoListBot()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
-
+     Функция отправляет пользователю сообщение о своем функционале
     :param update:отправляет боту информацию о том, что была отправлена команда /start.
-    :return:отправляет пользователю приветственное сообщение, с объяснением функционала бота
     """
     await update.message.reply_text(
         "Добро пожаловать в бот-список дел! Используйте /add <задача>, /remove <номер_задачи>, /change <номер_задачи> <новая_задача> или /list для просмотра задач.")
@@ -113,10 +112,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def add_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
-
+     Функция добавляет задачу в список
     :param update:используется для получения уникального идентификатора пользователя, который отправил команду /add.
     :param context:Функция сначала проверяет, есть ли какие-либо аргументы. Если аргументы есть, она объединяет их в строку (это будет ваша задача) и добавляет задачу с помощью метода add_task.
-    :return:отправляет пользователю подсказку, если он ничего не написал после /add
+    Либо пишет, что нужно указать задачу для добавления.
     """
     if context.args:
         task = ' '.join(context.args)
@@ -128,10 +127,9 @@ async def add_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def change_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
-
+     Функция заменяет старую задачу на новую
     :param update:содержит информацию о последнем событии, произошедшем в чате с ботом.
     :param context:Это список аргументов, переданных пользователем после команды.
-    :return:отправляет пользователю подсказку, если он не указал корректный номер, либо новую задачу
     """
     if len(context.args) < 2:
         await update.message.reply_text("Пожалуйста, укажите номер задачи и новое описание задачи.")
@@ -148,10 +146,9 @@ async def change_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def delete_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
-
+    Функция удаляет задачу из списка
     :param update:содержит информацию о последнем событии, произошедшем в чате с ботом.
     :param context:Это список аргументов, переданных пользователем после команды.
-    :return:отправляет пользователю подсказку, если он ничего не написал после /remove, либо указал несуществующий номер в списке
     """
     if context.args:
         try:
@@ -166,10 +163,9 @@ async def delete_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def view_tasks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
-
+     Функция показывает пользователю список задач.
     :param update: содержит информацию о последнем событии, произошедшем в чате с ботом
     :param context:Это список аргументов, которые могут быть переданы пользователем после команды
-    :return:отправляет пользователю спиоск его дел
     """
     response = todo_bot.view_tasks(update.effective_user.id)
     await update.message.reply_text(response)
