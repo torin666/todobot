@@ -91,10 +91,11 @@ class TodoListBot:
         """
         with sqlite3.connect(self.db_name) as conn:
             cursor = conn.cursor()
-            cursor.execute('SELECT task_id, task FROM todos WHERE user_id = ? ORDER BY added_time', (user_id,))
+            cursor.execute('SELECT task FROM todos WHERE user_id = ? ORDER BY added_time', (user_id,))
             tasks = cursor.fetchall()
             if tasks:
-                return "Your tasks:\n" + "\n".join(f"{i + 1}. {task[1]}" for i, task in enumerate(tasks))
+                #
+                return "Your tasks:\n" + "\n".join(f"{i + 1}. {task[0]}" for i, task in enumerate(tasks))
             return "No tasks found."
 
 
@@ -133,7 +134,7 @@ async def change_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     if len(context.args) < 2:
         await update.message.reply_text("Пожалуйста, укажите номер задачи и новое описание задачи.")
-        return
+        return #закончить выполнение функции и не выполнять блок try/except
 
     try:
         index = int(context.args[0]) - 1  # Преобразуем в нулевой индекс
@@ -171,7 +172,7 @@ async def view_tasks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(response)
 
 
-application = ApplicationBuilder().token('Your token').build()
+application = ApplicationBuilder().token('7384703197:AAHmbSd9O8hAdqhhpisZlWbc4YdSL5rqLHo').build()
 application.add_handler(CommandHandler("start", start))
 application.add_handler(CommandHandler("add", add_task))
 application.add_handler(CommandHandler("change", change_task))
